@@ -4,30 +4,34 @@ class Customer(object):
 
     @staticmethod
     def create(attributes):
-        pass
+        return self::createAPI(attributes)
 
     @staticmethod
     def fetch(key):
-        pass
+        return self::fetchAPI(key)
 
     def save(self):
-        pass
+        return self.saveAPI()
 
     def delete(self):
-        pass
+        return self.deleteAPI()
 
     def refresh(self):
-        pass
+        return self.refreshAPI()
 
     @staticmethod
     def search(options):
-        pass
+        return self::searchAPI($options)
 
     def payment_methods(self):
-        pass
+        return APIChildResource(Array("customer_id" => self.id), "Iugu_PaymentMethod")
 
     def invoices(self):
-        pass
+        return APIChildResource(Array("customer_id" => self.id), "Iugu_Invoice")
 
     def default_payment_method(self):
-        pass
+        if self.id is None:
+            return False
+        if self.default_payment_method_id is None:
+            return False
+        return Iugu_PaymentMethod::fetch(Array("customer_id" => self.id, "id" => self.default_payment_method_id))

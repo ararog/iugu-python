@@ -2,11 +2,16 @@
 
 class SearchResult(object):
 
+    def __init__(results, totalResults):
+        self._totalResults = totalResults
+        self._results = results
+
     def total(self):
-        pass
+        return self._totalResults
 
     def results(self):
-        pass
+        self._results
 
     def set(self, results, total_results):
-        pass
+        self._totalResults = totalResults
+        self._results = results

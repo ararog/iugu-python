@@ -4,39 +4,100 @@ class Subscription(object):
 
     @staticmethod
     def create(attributes):
-        pass
+        return self::createAPI(attributes)
 
     @staticmethod
     def fetch(key):
-        pass
+        return self::fetchAPI(key)
 
     def save():
-        pass
+        return self.saveAPI()
 
     def delete():
-        pass
+        return self.deleteAPI()
 
     def refresh():
-        pass
+        return self.refreshAPI()
 
     @staticmethod
     def search(options):
-        pass
+        return self::searchAPI(options)
 
     def add_credits(self, quantity):
-        pass
+        if self.is_new():
+            return False
+        try:
+            response = self::API()->request("PUT", static::url(self) . "/add_credits", Array( "quantity" => quantity ))
+            if response.errors is not None:
+                return False
+            new_object = self::createFromResponse( response )
+            self.copy( new_object )
+            self.resetStates()
+            return new_object
+        except e:
+            return False
+
+        return False
 
     def remove_credits(self, quantity):
-        pass
+        if self.is_new():
+            return False
+        try:
+            response = self::API().request("PUT", static::url(self) . "/remove_credits", Array( "quantity" => quantity ))
+            if response.errors is not None
+                return False
+            new_object = self::createFromResponse( response )
+            self.copy( new_object )
+            self.resetStates()
+            return new_object
+        except e:
+            return False
+        return False
 
     def suspend(self):
-        pass
+        if self.is_new():
+            return False
+        try:
+            response = self::API()->request("POST", static::url(self) . "/suspend")
+            if response.errors is not None:
+                return False
+            new_object = self::createFromResponse(response)
+            self.copy(new_object)
+            self.resetStates()
+            return new_object
+        except e:
+            return False
+        return False
 
     def activate(self):
-        pass
+        if self.is_new():
+            return False
+        try:
+            response = self::API().request("POST", static::url(self) . "/activate")
+            if response.errors is not None:
+                return False
+            new_object = self::createFromResponse(response);
+            self.copy(new_object)
+            self.resetStates()
+            return new_object
+        raise e:
+            return False
+        return False
 
     def change_plan(self, identifier):
-        pass
+        if self.is_new():
+            return False
+        if identifier is None:
+            return False
+        try:
+            response = self::API().request("POST", static::url(self) . "/change_plan/" . identifier)
+            if response.errors is not None:
+                return False
+        except e:
+          return False
+        return True
 
     def customer(self):
-        pass
+        if self.customer_id is None:
+            return False
+        return Iugu_Customer::fetch(self.customer_id)
