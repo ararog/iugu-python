@@ -1,7 +1,10 @@
+from api_resource import APIResource
 
+class PaymentToken(APIResource):
 
-class PaymentToken(object):
+    def __init__(self):
+        pass
 
     @staticmethod
     def create(attributes):
-        return self::createAPI(attributes)
+        return APIResource._createAPI(attributes)

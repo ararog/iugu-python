@@ -1,8 +1,8 @@
-
+from api_request import APIRequest
 
 class APIResource:
 
-    private static _apiRequester = null;
+    _apiRequester = None
 
     @staticmethod
     def convertClassToObjectType():
@@ -12,47 +12,44 @@ class APIResource:
 
     @staticmethod
     def objectBaseURI():
-        object_type = self::convertClassToObjectType()
-        switch(object_type) {
-          // Add Exceptions as needed
-          case 'charge':
-            return object_type;
-          case 'payment_token':
-            return object_type;
-          default:
-           return object_type . 's';
-        }
+        object_type = APIResource.convertClassToObjectType()
+        if object_type == 'charge':
+            return object_type
+        elif object_type == 'payment_token':
+            return object_type
+        else:
+           return object_type + 's'
 
     @staticmethod
     def API():
-        if APIResource::_apiRequester is None:
-            APIResource::_apiRequester = Iugu_APIRequest()
-        return APIResource::_apiRequester
+        if APIResource._apiRequester is None:
+            APIResource._apiRequester = APIRequest()
+        return APIResource._apiRequester
 
 
     @staticmethod
     def endpointAPI(object=None, uri_path=""):
         path = ""
-        if (is_string(object))
+        if is_string(object):
             path  = "/" . object
-        else if (is_object(object) && (isset(object["id"])) )
+        elif is_object(object) and isset(object["id"]):
             path = "/" . object["id"]
-        return Iugu::getBaseURI() . uri_path . "/" . self::objectBaseURI() . path
+        return Iugu.getBaseURI() + uri_path + "/" + APIResource.objectBaseURI() + path
 
 
     @staticmethod
     def url(object=None):
-        return self::endpointAPI( object )
+        return APIResource.endpointAPI( object )
 
     @staticmethod
     def _createFromResponse(response):
-        return Iugu_Factory::createFromResponse(self::convertClassToObjectType(), response)
+        return Factory.createFromResponse(APIResource.convertClassToObjectType(), response)
 
 
     @staticmethod
     def _createAPI(attributes=[]):
-        response = self::createFromResponse(self::API().request("POST", static::url(attributes), attributes))
-        for attr => value in attributes:
+        response = APIResource._createFromResponse(APIResource.API().request("POST", url(attributes), attributes))
+        for attr, value in attributes:
             response[attr] = value
         return response
 
@@ -61,7 +58,7 @@ class APIResource:
         if self["id"] is None:
             return False
         try:
-            response = self::API().request("DELETE", static::url(self))
+            response = APIResource.API().request("DELETE", url(self))
             if response.errors is not None:
                 raise IuguException()
         except e:
@@ -69,40 +66,39 @@ class APIResource:
         return True
 
     @staticmethod
-    def _searchAPI(options=Array()):
+    def _searchAPI(options=[]):
         try:
-            response = self::API().request("GET", static::url(options), options)
-            return self::createFromResponse(response)
+            response = APIResource.API().request("GET", url(options), options)
+            return APIResource._createFromResponse(response)
         except e:
-
-        return []
+            return []
 
     @staticmethod
     def _fetchAPI(key):
         try:
-            response = static::API().request("GET",static::url(key))
-            return self::createFromResponse(response)
+            response = APIResource.API().request("GET", url(key))
+            return APIResource._createFromResponse(response)
         except e:
-            raise IuguObjectNotFound(self::convertClassToObjectType(get_called_class()) . ":" . " not found")
+            raise IuguObjectNotFound(APIResource.convertClassToObjectType(get_called_class()) + ":" + " not found")
 
-    def _refreshAPI():
+    def _refreshAPI(self):
         if self.is_new():
             return False
         try:
-            response = self::API().request("GET", static::url(self))
+            response = APIResource.API().request("GET", url(self))
             if response.errors is not None:
                 raise IuguObjectNotFound()
-            new_object = self::createFromResponse(response)
+            new_object = APIResource._createFromResponse(response)
             self.copy(new_object)
             self.resetStates()
         except e:
             return False
         return True
 
-    def _saveAPI():
+    def _saveAPI(self):
         try:
-            response = self::API().request(self.is_new() ? "POST" : "PUT", static::url(self), self.modifiedAttributes())
-            new_object = self::createFromResponse(response)
+            response = APIResource.API().request("POST" if self.is_new() else "PUT", url(self), self.modifiedAttributes())
+            new_object = APIResource._createFromResponse(response)
             self.copy(new_object)
             self.resetStates()
             if response.errors is not None:

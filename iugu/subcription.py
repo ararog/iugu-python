@@ -1,40 +1,41 @@
+from api_resource import APIResource
+from customer import Customer
 
-
-class Subscription(object):
+class Subscription(APIResource):
 
     @staticmethod
     def create(attributes):
-        return self::createAPI(attributes)
+        return APIResource._createAPI(attributes)
 
     @staticmethod
     def fetch(key):
-        return self::fetchAPI(key)
+        return APIResource._fetchAPI(key)
 
-    def save():
-        return self.saveAPI()
+    def save(self):
+        return self._saveAPI()
 
-    def delete():
-        return self.deleteAPI()
+    def delete(self):
+        return self._deleteAPI()
 
-    def refresh():
-        return self.refreshAPI()
+    def refresh(self):
+        return self._refreshAPI()
 
     @staticmethod
     def search(options):
-        return self::searchAPI(options)
+        return APIResource._searchAPI(options)
 
     def add_credits(self, quantity):
         if self.is_new():
             return False
         try:
-            response = self::API()->request("PUT", static::url(self) . "/add_credits", Array( "quantity" => quantity ))
+            response = APIResource.API().request("PUT", url(self) + "/add_credits", {"quantity": quantity})
             if response.errors is not None:
                 return False
-            new_object = self::createFromResponse( response )
+            new_object = APIResource._createFromResponse(response)
             self.copy( new_object )
             self.resetStates()
             return new_object
-        except e:
+        except Exception:
             return False
 
         return False
@@ -43,14 +44,14 @@ class Subscription(object):
         if self.is_new():
             return False
         try:
-            response = self::API().request("PUT", static::url(self) . "/remove_credits", Array( "quantity" => quantity ))
-            if response.errors is not None
+            response = APIResource.API().request("PUT", url(self) + "/remove_credits", {"quantity": quantity})
+            if response.errors is not None:
                 return False
-            new_object = self::createFromResponse( response )
+            new_object = APIResource._createFromResponse( response )
             self.copy( new_object )
             self.resetStates()
             return new_object
-        except e:
+        except Exception:
             return False
         return False
 
@@ -58,14 +59,14 @@ class Subscription(object):
         if self.is_new():
             return False
         try:
-            response = self::API()->request("POST", static::url(self) . "/suspend")
+            response = APIResource.API().request("POST", url(self) + "/suspend")
             if response.errors is not None:
                 return False
-            new_object = self::createFromResponse(response)
+            new_object = APIResource._createFromResponse(response)
             self.copy(new_object)
             self.resetStates()
             return new_object
-        except e:
+        except Exception:
             return False
         return False
 
@@ -73,14 +74,14 @@ class Subscription(object):
         if self.is_new():
             return False
         try:
-            response = self::API().request("POST", static::url(self) . "/activate")
+            response = APIResource.API().request("POST", url(self) + "/activate")
             if response.errors is not None:
                 return False
-            new_object = self::createFromResponse(response);
+            new_object = APIResource._createFromResponse(response);
             self.copy(new_object)
             self.resetStates()
             return new_object
-        raise e:
+        except Exception:
             return False
         return False
 
@@ -90,14 +91,14 @@ class Subscription(object):
         if identifier is None:
             return False
         try:
-            response = self::API().request("POST", static::url(self) . "/change_plan/" . identifier)
+            response = APIResource.API().request("POST", url(self) + "/change_plan/" + identifier)
             if response.errors is not None:
                 return False
-        except e:
+        except Exception:
           return False
         return True
 
     def customer(self):
         if self.customer_id is None:
             return False
-        return Iugu_Customer::fetch(self.customer_id)
+        return Customer.fetch(self.customer_id)

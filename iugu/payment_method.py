@@ -1,6 +1,10 @@
+from iugu_exceptions import IuguException
+from api_resource import APIResource
 
+class PaymentMethod(APIResource):
 
-class PaymentMethod(object):
+    def __init__(self):
+        pass
 
     @staticmethod
     def url(object):
@@ -10,25 +14,25 @@ class PaymentMethod(object):
         object_id = None
         if object["id"] is not None:
             object_id = object["id"]
-        return self::endpointAPI(object_id, "/customers/" . object["customer_id"])
+        return APIResource.endpointAPI(object_id, "/customers/" + object["customer_id"])
 
     @staticmethod
     def create(attributes):
-        return self::createAPI($attributes)
+        return APIResource._createAPI(attributes)
 
     @staticmethod
     def fetch(key):
-        return self::fetchAPI($key)
+        return APIResource._fetchAPI(key)
 
     def save(self):
-        return self.saveAPI()
+        return self._saveAPI()
 
     def delete(self):
-        return self.deleteAPI()
+        return self._deleteAPI()
 
     def refresh(self):
-        return self.refreshAPI()
+        return self._refreshAPI()
 
     @staticmethod
     def search(options):
-        return self::searchAPI(options)
+        return APIResource._searchAPI(options)

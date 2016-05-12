@@ -8,7 +8,7 @@ class Iugu:
 
     @staticmethod
     def getBaseURI():
-        return endpoint . "/" . api_version
+        return endpoint + "/" + api_version
 
     @staticmethod
     def setApiKey(_api_key):

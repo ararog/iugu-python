@@ -3,7 +3,7 @@ class Object:
     def __init__(self, attributes=[]):
         self._attributes = []
         self._unsavedAttributes = []
-        foreach (attributes as key=>value):
+        for key, value in attributes:
             self._attributes[key] = value
 
     def __set(self, key, value):

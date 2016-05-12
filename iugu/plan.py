@@ -1,24 +1,27 @@
+from api_resource import APIResource
 
+class Plan(APIResource):
 
-class Plan(object):
+    def __init__(self):
+        pass
 
     @staticmethod
     def create(attributes):
-        return self::createAPI(attributes)
+        return APIResource._createAPI(attributes)
 
     @staticmethod
     def fetch(key):
-        return self::fetchAPI(key)
+        return APIResource._fetchAPI(key)
 
     def save(self):
-        return self.saveAPI()
+        return self._saveAPI()
 
     def delete(self):
-        return self.deleteAPI()
+        return self._deleteAPI()
 
     def refresh(self):
-        return self.refreshAPI()
+        return self._refreshAPI()
 
     @staticmethod
     def search(options):
-        return self::searchAPI($options)
+        return APIResource._searchAPI(options)

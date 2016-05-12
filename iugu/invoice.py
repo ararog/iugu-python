@@ -1,44 +1,49 @@
+from iugu_exceptions import IuguRequestException
+from api_resource import APIResource
+from customer import Customer
 
+class Invoice(APIResource):
 
-class Invoice(object):
+    def __init__(self):
+        pass
 
     @staticmethod
     def create(attributes):
-        return self::createAPI(attributes)
+        return APIResource._createAPI(attributes)
 
     @staticmethod
     def fetch(key):
-        return self::fetchAPI($key)
+        return APIResource._fetchAPI(key)
 
     def save(self):
-        return self.saveAPI()
+        return self._saveAPI()
 
     def delete(self):
-        return self.deleteAPI()
+        return self._deleteAPI()
 
     def refresh(self):
-        return self.refreshAPI()
+        return self._refreshAPI()
 
     @staticmethod
     def search(options):
-        return self::searchAPI(options)
+        return APIResource._searchAPI(options)
 
     def customer(self):
-        if (self.customer_id is None)
-            return false
-        return Iugu_Customer::fetch(self.customer_id)
+        if self.customer_id is None:
+            return False
+        return Customer.fetch(self.customer_id)
 
     def cancel(self):
-        if (self.is_new())
+        if self.is_new():
             return False
         try:
-            response = self::API().request("PUT", static::url(self) . "/cancel")
+            response = APIResource.API().request("PUT", url(self) + "/cancel")
             if response.errors is not None:
                 raise IuguRequestException(response.errors)
-            new_object = self::createFromResponse(response)
+            new_object = APIResource.API()._createFromResponse(response)
             self.copy(new_object)
             self.resetStates()
-        except e:
+        except IuguRequestException:
             return False
 
         return True
@@ -47,13 +52,13 @@ class Invoice(object):
         if self.is_new():
             return False
         try:
-            response = self::API().request("POST", static::url(self) . "/refund")
+            response = APIResource.API().request("POST", url(self) + "/refund")
             if response.errors is not None:
                 raise IuguRequestException(response.errors)
-            new_object = self::createFromResponse(response)
+            new_object = APIResource.API()._createFromResponse(response)
             self.copy(new_object)
             self.resetStates()
-        raise e:
+        except IuguRequestException:
             return False
 
         return True
