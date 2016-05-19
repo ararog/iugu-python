@@ -5,7 +5,7 @@ from customer import Customer
 class Invoice(APIResource):
 
     def __init__(self):
-        pass
+        self.customer_id = None
 
     @staticmethod
     def create(attributes):

@@ -5,7 +5,8 @@ from payment_method import PaymentMethod
 class Customer(APIResource):
 
     def __init__(self):
-        pass
+        self.identifier = None
+        self.default_payment_method_id = None
 
     @staticmethod
     def create(attributes):
@@ -29,14 +30,14 @@ class Customer(APIResource):
         return APIResource._searchAPI(options)
 
     def payment_methods(self):
-        return APIChildResource({"customer_id": self.id}, "Iugu_PaymentMethod")
+        return APIChildResource({"customer_id": self.identifier}, "Iugu_PaymentMethod")
 
     def invoices(self):
-        return APIChildResource({"customer_id": self.id}, "Iugu_Invoice")
+        return APIChildResource({"customer_id": self.identifier}, "Iugu_Invoice")
 
     def default_payment_method(self):
-        if self.id is None:
+        if self.identifier is None:
             return False
         if self.default_payment_method_id is None:
             return False
-        return PaymentMethod.fetch({"customer_id": self.id, "id": self.default_payment_method_id})
+        return PaymentMethod.fetch({"customer_id": self.identifier, "id": self.default_payment_method_id})

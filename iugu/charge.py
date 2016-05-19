@@ -4,7 +4,7 @@ from invoice import Invoice
 class Charge(APIResource):
 
     def __init__(self):
-        pass
+        self.invoice_id = None
 
     @staticmethod
     def create(attributes):

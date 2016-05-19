@@ -15,8 +15,8 @@ class APIChildResource:
         return object
 
     def create(self, attributes=[]):
-        result = call_user_func_array(self._fabricator + '::create', array( self.mergeparams(attributes), self._parentKeys))
-        if result:
+        result = call_user_func_array(self._fabricator + '::create', array( self.mergeParams(attributes), self._parentKeys))
+        if result is not None:
             self.configureParentKeys(result)
         return result
 
@@ -33,6 +33,6 @@ class APIChildResource:
         if is_string(key):
             key = {"id": key}
         result = call_user_func_array(self._fabricator + '::fetch', Array( self.mergeParams(key), self._parentKeys ))
-        if result:
+        if result is not None:
             self.configureParentKeys(result)
         return result

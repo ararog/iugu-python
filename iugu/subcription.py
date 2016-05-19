@@ -3,6 +3,9 @@ from customer import Customer
 
 class Subscription(APIResource):
 
+    def __init__(self):
+        self.customer_id = None
+
     @staticmethod
     def create(attributes):
         return APIResource._createAPI(attributes)
@@ -77,7 +80,7 @@ class Subscription(APIResource):
             response = APIResource.API().request("POST", url(self) + "/activate")
             if response.errors is not None:
                 return False
-            new_object = APIResource._createFromResponse(response);
+            new_object = APIResource._createFromResponse(response)
             self.copy(new_object)
             self.resetStates()
             return new_object
@@ -95,7 +98,7 @@ class Subscription(APIResource):
             if response.errors is not None:
                 return False
         except Exception:
-          return False
+            return False
         return True
 
     def customer(self):

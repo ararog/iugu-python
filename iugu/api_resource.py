@@ -4,6 +4,9 @@ class APIResource:
 
     _apiRequester = None
 
+    def __init__(self):
+        pass
+
     @staticmethod
     def convertClassToObjectType():
         object_type = str_replace("Iugu_", "", get_called_class())
@@ -18,7 +21,7 @@ class APIResource:
         elif object_type == 'payment_token':
             return object_type
         else:
-           return object_type + 's'
+            return object_type + 's'
 
     @staticmethod
     def API():
@@ -61,7 +64,7 @@ class APIResource:
             response = APIResource.API().request("DELETE", url(self))
             if response.errors is not None:
                 raise IuguException()
-        except e:
+        except Exception:
             return False
         return True
 
@@ -70,7 +73,7 @@ class APIResource:
         try:
             response = APIResource.API().request("GET", url(options), options)
             return APIResource._createFromResponse(response)
-        except e:
+        except Exception:
             return []
 
     @staticmethod
@@ -91,7 +94,7 @@ class APIResource:
             new_object = APIResource._createFromResponse(response)
             self.copy(new_object)
             self.resetStates()
-        except e:
+        except Exception:
             return False
         return True
 
@@ -103,6 +106,6 @@ class APIResource:
             self.resetStates()
             if response.errors is not None:
                 raise IuguException()
-        except e:
+        except Exception:
             return False
         return True

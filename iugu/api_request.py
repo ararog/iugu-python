@@ -1,9 +1,13 @@
-
+from iugu_exceptions import IuguAuthenticationException, IuguObjectNotFound
+from iugu import Iugu
+import base64
+import json
+from utilities import Utilities
 
 class APIRequest:
 
     def __defaultHeaders(self, headers = []):
-        headers.append("Authorization: Basic " . base64_encode(Iugu.getApiKey() + ":"))
+        headers.append("Authorization: Basic " + base64.b64encode(Iugu.getApiKey() + ":"))
         headers.append("Accept: application/json")
         headers.append("Accept-Charset: utf-8")
         headers.append("User-Agent: Iugu PHPLibrary")
@@ -12,27 +16,30 @@ class APIRequest:
 
     def request(self, method, url, data=[]):
         if Iugu.getApiKey() is None:
-            Iugu_Utilities.authFromEnv()
+            Utilities.authFromEnv()
 
         if Iugu.getApiKey() is None:
             raise IuguAuthenticationException("Chave de API não configurada. Utilize Iugu.setApiKey(...) para configurar.")
 
-        headers = self._defaultHeaders()
-        list( response_body, response_code ) = self.requestWithCURL( method, url, headers, data )
-        response = json_decode(response_body)
-
-        if json_last_error() != JSON_ERROR_NONE:
+        headers = self.__defaultHeaders()
+        ( response_body, response_code ) = self._requestWithCURL( method, url, headers, data )
+        try:
+            response = json.loads(response_body)
+        except ValueError:
             raise IuguObjectNotFound(response_body)
 
         if response_code == 404:
             raise IuguObjectNotFound(response_body)
 
         if response.errors is not None:
-            if gettype(response.errors) != "string" and count(get_object_vars(response.errors)) == 0:
-                unset(response.errors)
-            else if gettype(response.errors) != "string" and count(get_object_vars(response.errors)) > 0:
-                response.errors = (Array) response.errors
-            if isset(response.errors and gettype(response.errors) == "string"):
+            if type(response.errors) != "str" and len(response.errors) == 0:
+                response.errors = None
+            elif type(response.errors) != "str" and len(response.errors) > 0:
+                response.errors = response.errors
+            if response.errors is not None and type(response.errors) == "str":
                 response.errors = response.errors
         iugu_last_api_response_code = response_code
         return response
+
+    def _requestWithCURL(self, method, url, headers, data=[]):
+        pass
